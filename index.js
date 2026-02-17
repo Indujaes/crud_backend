@@ -1,0 +1,26 @@
+const express = require("express");
+require("dotenv").config();
+const cors = require("cors");
+const userRoutes = require("./routes/userRoutes");
+
+
+const app = express();
+app.use(cors());
+app.use(express.json());
+
+app.use("/uploads",express.static("uploads"));
+
+const PORT = process.env.PORT || 3000;
+
+app.get("/", (req, res) => {
+    res.json({ message : "Working Fine.." });
+});
+
+
+
+//Routes
+app.use("/api/users", userRoutes);
+
+app.listen(PORT, () => {
+    console.log(`Server is running on port ${PORT}`);
+});
