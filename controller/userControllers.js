@@ -16,14 +16,14 @@ const getAllUsers = async (req, res) => {
     let where = "";
 
     if (search) {
-      where = "WHERE EmpName ILIKE $1 OR EmpDept ILIKE $1";
+      where = "WHERE empname ILIKE $1 OR empdept ILIKE $1";
       params.push(`%${search}%`);
     }
 
     const usersQuery = `
       SELECT * FROM employee
       ${where}
-      ORDER BY Id DESC
+      ORDER BY id DESC
       LIMIT $${params.length + 1}
       OFFSET $${params.length + 2}
     `;
@@ -55,11 +55,11 @@ const getAllUsers = async (req, res) => {
 // ===============================
 const getSingleUserById = async (req, res) => {
   try {
-    const { Id } = req.params;
+    const { id } = req.params;
 
     const result = await db.query(
-      "SELECT * FROM employee WHERE Id = $1",
-      [Id]
+      "SELECT * FROM employee WHERE id = $1",
+      [id]
     );
 
     if (result.rows.length === 0) {
@@ -77,14 +77,14 @@ const getSingleUserById = async (req, res) => {
 // ===============================
 const addUser = async (req, res) => {
   try {
-    const { EmpName, EmpAge, EmpDept } = req.body;
+    const { empname, empage, empdept } = req.body;
     const photo = req.file ? req.file.filename : null;
 
     const result = await db.query(
-      `INSERT INTO employee (EmpName, EmpAge, EmpDept, photo)
+      `INSERT INTO employee (empname, empage, empdept, photo)
        VALUES ($1,$2,$3,$4)
        RETURNING *`,
-      [EmpName, EmpAge, EmpDept, photo]
+      [empname, empage, empdept, photo]
     );
 
     res.status(201).json(result.rows[0]);
@@ -98,15 +98,15 @@ const addUser = async (req, res) => {
 // ===============================
 const updateUser = async (req, res) => {
   try {
-    const { EmpName, EmpAge, EmpDept } = req.body;
+    const { empname, empage, empdept } = req.body;
     const photo = req.file ? req.file.filename : null;
 
     const result = await db.query(
       `UPDATE employee
-       SET EmpName=$1, EmpAge=$2, EmpDept=$3, photo=$4
-       WHERE Id=$5
+       SET empname=$1, empage=$2, empdept=$3, photo=$4
+       WHERE id=$5
        RETURNING *`,
-      [EmpName, EmpAge, EmpDept, photo, req.params.Id]
+      [empname, empage, empdept, photo, req.params.id]
     );
 
     if (result.rows.length === 0) {
@@ -125,8 +125,8 @@ const updateUser = async (req, res) => {
 const deleteUser = async (req, res) => {
   try {
     const result = await db.query(
-      "SELECT photo FROM employee WHERE Id=$1",
-      [req.params.Id]
+      "SELECT photo FROM employee WHERE id=$1",
+      [req.params.id]
     );
 
     if (result.rows.length === 0) {
@@ -144,7 +144,7 @@ const deleteUser = async (req, res) => {
       }
     }
 
-    await db.query("DELETE FROM employee WHERE Id=$1", [req.params.Id]);
+    await db.query("DELETE FROM employee WHERE id=$1", [req.params.id]);
 
     res.json({ message: "User deleted successfully" });
   } catch (error) {

@@ -2,7 +2,7 @@ const express = require("express");
 require("dotenv").config();
 const cors = require("cors");
 const userRoutes = require("./routes/userRoutes");
-const db = require("./db"); // ✅ important
+const db = require("./db"); //
 
 const app = express();
 app.use(cors());
@@ -13,22 +13,21 @@ const createTable = async () => {
   try {
     await db.query(`
       CREATE TABLE IF NOT EXISTS employee (
-        Id SERIAL PRIMARY KEY,
-        EmpName VARCHAR(100),
-        EmpAge INT,
-        EmpDept VARCHAR(100),
+        id SERIAL PRIMARY KEY,
+        empname VARCHAR(100),
+        empage INT,
+        empdept VARCHAR(100),
         photo VARCHAR(255)
       )
     `);
 
-    console.log("✅ employee table created");
+    console.log("employee table created");
   } catch (err) {
-    console.error("❌ Table create error:", err.message);
+    console.error(" Table create error:", err.message);
   }
 };
 
-createTable(); // ✅ RUNS ON SERVER START
-
+createTable(); // 
 app.use("/uploads", express.static("uploads"));
 
 app.get("/", (req, res) => {
