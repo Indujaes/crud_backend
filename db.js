@@ -3,11 +3,11 @@ require("dotenv").config();
 
 // Connection Pool
 const db = new Pool({
-    host: "dpg-d6aa3drnv86c73bkn290-a",
-    user: "empdb_q8lr_user",
-    password: "S2dim558ZdUCMBYDjKYJnbo5bnBkHYva",
-    database: "empdb_q8lr",
-    port: 5432, // PostgreSQL default port
+    host: process.env.DB_HOST,
+    user: process.env.DB_USER,
+    password: process.env.DB_PASSWORD,
+    database:process.env.DB_NAME,
+    port: process.env.DB_PORT, // PostgreSQL default port
 });
 
 // Test Connection
